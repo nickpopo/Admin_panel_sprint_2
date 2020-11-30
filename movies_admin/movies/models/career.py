@@ -1,3 +1,4 @@
+import logging
 import uuid
 from enum import Enum
 
@@ -6,6 +7,9 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from .utilities import UpdatedCreatedMixin
+
+
+logger = logging.getLogger()
 
 
 class CareerNameEnum(Enum):
@@ -33,7 +37,11 @@ class Career(UpdatedCreatedMixin):
         :param career_name
         :return str: id of the required career name
         """
-        career_id = Career.objects.filter(name=career_name).first()
-
-        return (career_id.id if career_id else '')
+        career = None
+        try:
+            career = Career.objects.get(name=career_name)
+        except Career.DoesNotExist as error:
+            logger.error(error)
+            raise Career.DoesNotExist
+        return career.id
 
