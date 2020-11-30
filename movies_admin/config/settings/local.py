@@ -1,6 +1,8 @@
 import os
 
 
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 

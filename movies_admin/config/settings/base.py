@@ -10,32 +10,31 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
-from pathlib import Path
 import os
+from pathlib import Path
 from dotenv import load_dotenv
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
-load_dotenv(os.path.join(BASE_DIR, '.env'))
+load_dotenv(os.path.join(BASE_DIR, '../.env_local'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', os.urandom(16))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.environ.get('DJANGO_DEBUG', False)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '127.0.0.1').split()
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,7 +45,6 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -115,7 +113,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Allowed IPS
 
-INTERNAL_IPS = []
+INTERNAL_IPS = os.environ.get('DJANGO_INTERNAL_IPS', '').split()
 
 
 # Internationalization
@@ -139,4 +137,6 @@ STATIC_URL = '/static/'
 
 
 # Separate postgres schema for 'movies' application
-MOVIES_SCHEMA = 'content"."%s'
+MOVIES_SCHEMA = f'{os.environ.get("DJANGO_POSTGRES_SCHEMA_NAME", "content")}"."%s'
+
+DJANGO_ITEMS_PER_PAGE = int(os.environ.get('DJANGO_ITEMS_PER_PAGE', 50))
