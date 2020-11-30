@@ -1,0 +1,43 @@
+version: '3'
+services:
+  backend:
+    build:
+      context: ./movies_admin
+      dockerfile: Dockerfile
+    ports:
+      - 8000:8000
+    env_file:
+      - ./movies_admin/.env
+    volumes:
+      - static:/opt/app/static/
+      - media:/opt/app/media/
+    depends_on: 
+      - postgres
+
+  postgres:
+    image: postgres:latest
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5432:5432
+
+  elasticsearch:
+    image: elasticsearch:7.9.3
+    ports:
+      - 9200:9200
+
+  nginx:
+    image: nginx:1.19.5
+    volumes: 
+      - ./movies_admin/src/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./movies_admin/src/configs:/etc/nginx/conf.d:ro
+      - static:/var/www/static/:ro
+      - media:/var/www/media/:ro
+    depends_on: 
+      - backend
+    ports: 
+      - "80:80"
+volumes:
+  static:
+  media:
