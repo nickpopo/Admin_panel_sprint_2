@@ -16,7 +16,7 @@
    - DJANGO_POSTGRES_SCHEMA_NAME `content`
    - DJANGO_SETTING_MODULE `config.settings.production`
    - DJANGO_STATIC_ROOT `/opt/app/static/`
-   - DJANGO_MEDIA_ROOT `media:/opt/app/media/`
+   - DJANGO_MEDIA_ROOT `/opt/app/media/`
    - DJANGO_ALLOWED_HOSTS указывать через пробел
    - остальные также обязательны, смотрите на каких портах что работает в docker-compose
 2. Переименовать .env_example -> .env
