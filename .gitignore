@@ -95,5 +95,5 @@ local_settings.py
 venv/
 
 .env
-.env_*
+.env_local
 db.sqlite3
